@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>GFModMenu</AssemblyName>
+    <Product>GF Mod Menu</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>GFModMenu</RootNamespace>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)GFModMenu.dll"
+          DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\Gelli Fields Demo\BepInEx\plugins\GFModMenu\" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.14" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Gelli Fields Demo\Gelli Fields_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Gelli Fields Demo\Gelli Fields_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="TMPro">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Gelli Fields Demo\Gelli Fields_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="GFApi">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Gelli Fields Demo\Bepinex\plugins\GFApi\GFApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
