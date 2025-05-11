@@ -1,19 +1,17 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 using BepInEx.Bootstrap;
-using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
+using GFApi;
 
 namespace GFModMenu;
 
-[BepInDependency(DependencyGUID:"GFApi", Flags:BepInDependency.DependencyFlags.HardDependency)]
+[BepInDependency(DependencyGUID:"GFApi", "1.1.2")]
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
@@ -33,12 +31,12 @@ public class Plugin : BaseUnityPlugin
     }
 
     private void OnEnable(){
-        GFApi.MainPlugin.OnGameLoad.AddListener(Init);
+        GFApi.MainPlugin.OnSceneLoad.AddListener(Init);
     }
 
-    private void Init()
+    private void Init(GameData.biomeList scene)
     {
-        if(GFApi.MainPlugin.currentScene == GameData.biomeList.MainMenu){
+        if(scene == GameData.biomeList.MainMenu){
             GameObject settingsButton = GameObject.Find("Train-Button-Settings").GetComponentInChildren<VanillaButton>().gameObject;
             GameObject hud = GameObject.Find("HUD");
             GameObject settingsMenu = hud.transform.GetChild(0).gameObject;
@@ -67,7 +65,7 @@ public class Plugin : BaseUnityPlugin
             modBackButton.GetComponent<StopMainMenu>().menu = modMenuMenu;
             modBackButton.GetComponent<VanillaButton>().menu = modMenu.GetComponent<Menu>();
 
-            modMenu.transform.GetComponentInChildren<TextMeshProUGUI>().font = settingsButton.GetComponentInChildren<TextMeshPro>().font;
+            modMenu.transform.GetComponentInChildren<TextMeshProUGUI>().font = MainPlugin.gameFont;
             modMenu.transform.GetComponentInChildren<TextMeshProUGUI>().characterSpacing = -15;
 
             modMenu.SetActive(false);
